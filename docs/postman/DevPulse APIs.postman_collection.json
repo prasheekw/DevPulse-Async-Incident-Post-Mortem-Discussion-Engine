@@ -1,0 +1,452 @@
+{
+  "info": {
+    "_postman_id": "808b729f-16c0-473a-b80e-e5209e28e9b4",
+    "name": "DevPulse APIs",
+    "description": "DevPulse is an asynchronous incident post-mortem and discussion platform designed for engineering teams.\n\nThis API collection contains endpoints for user authentication, user management, posts, and nested comments. It supports secure user authentication using JWT, post management, threaded discussions, and comment soft deletion.\n\n**Tech Stack:** FastAPI, Python, PostgreSQL, SQLAlchemy, Pydantic, Alembic, JWT Authentication.\n\nThis collection is intended for testing and interacting with the DevPulse backend API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57676402",
+    "_collection_link": "https://go.postman.co/collection/57676402-808b729f-16c0-473a-b80e-e5209e28e9b4?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Posts APIs",
+      "item": [
+        {
+          "name": "create post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"\",\r\n    \"content\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{{base_url}}}/posts/create_post",
+              "host": [
+                "{{{base_url}}}"
+              ],
+              "path": [
+                "posts",
+                "create_post"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Creates a new post with a title and content. Requires JWT authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "get all posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{{base_url}}/posts/all_posts",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "all_posts"
+              ]
+            },
+            "description": "Retrieves all available posts from the platform."
+          },
+          "response": []
+        },
+        {
+          "name": "get post by id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"sometesting\",\r\n    \"content\": \"sometesting vey big post\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{{base_url}}/posts/post/{post_id}",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "post",
+                "{post_id}"
+              ]
+            },
+            "description": "Retrieves a specific post using its unique post ID."
+          },
+          "response": []
+        },
+        {
+          "name": "update post",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"\",\r\n    \"content\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{{base_url}}/posts/update_post/{post_id}",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "update_post",
+                "{post_id}"
+              ]
+            },
+            "description": "Updates an existing post. Only the post owner can modify it. Requires JWT authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "delete post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"\",\r\n    \"content\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{{base_url}}/posts/delete_post/{post_id}",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "posts",
+                "delete_post",
+                "{post_id}"
+              ]
+            },
+            "description": "Deletes an existing post. Only the post owner can perform this operation. Requires JWT authentication."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for creating, retrieving, updating, and deleting posts. Authenticated users can create posts and manage their own content, while posts can be retrieved for viewing by other users."
+    },
+    {
+      "name": "User APIs",
+      "item": [
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.collectionVariables.set(\r\n    \"token\",\r\n    response.access_token\r\n);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{{base_url}}/login",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "description": "Authenticates a user using their username and password. Returns an access token upon successful authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "update_user",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n            \"username\": \"\",\r\n            \"email\": \"\",\r\n            \"password\": \"\"\r\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{{base_url}}/update_user/9",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "update_user",
+                "9"
+              ]
+            },
+            "description": "Updates the authenticated user's account information, including username, email, and password. Requires JWT authentication and ownership verification."
+          },
+          "response": []
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"\",\r\n    \"email\": \"\",\r\n    \"password\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{{base_url}}/register",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "description": "Registers a new user account after validating the submitted username, email, and password."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete user",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{{base_url}}/delete_user/9",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "delete_user",
+                "9"
+              ]
+            },
+            "description": "delete the authenticated user's account informatio. Requires JWT authentication and ownership verification."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for user authentication and account management, including registration, login, retrieving user information, updating account details, and deleting user accounts. Protected operations require JWT authentication."
+    },
+    {
+      "name": "Comments APIs",
+      "item": [
+        {
+          "name": "create comment by post_id",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "3",
+                "disabled": true
+              },
+              {
+                "key": "title",
+                "value": "sometesting",
+                "disabled": true
+              },
+              {
+                "key": "content",
+                "value": "sometesting vey big post",
+                "disabled": true
+              },
+              {
+                "key": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"comment\": \"\",\r\n    \"post_id\": ,\r\n    \"parent_comment_id\": \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{{base_url}}/comments/create_comment",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "comments",
+                "create_comment"
+              ]
+            },
+            "description": "Creates a comment on a post. Supports nested replies by accepting an optional parent comment ID. Requires JWT authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "get comments by post id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": ""
+              }
+            ],
+            "url": {
+              "raw": "{{{base_url}}/comments/get_comments_by_post_id/{post_id}",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "comments",
+                "get_comments_by_post_id",
+                "{post_id}"
+              ]
+            },
+            "description": "Retrieves comments associated with a post in a hierarchical structure, including nested replies and deleted-comment placeholders."
+          },
+          "response": []
+        },
+        {
+          "name": "update comments",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{{base_url}}/comments/update_comment/{comment_id}",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "comments",
+                "update_comment",
+                "{comment_id}"
+              ]
+            },
+            "description": "Updates an existing comment. Only its owner can edit it, and deleted comments cannot be modified."
+          },
+          "response": []
+        },
+        {
+          "name": "delete comments by comment id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": ""
+              }
+            ],
+            "url": {
+              "raw": "{{{base_url}}/comments/delete_comment/{comment_id}",
+              "host": [
+                "{{{base_url}}"
+              ],
+              "path": [
+                "comments",
+                "delete_comment",
+                "{comment_id}"
+              ]
+            },
+            "description": "Soft-deletes a comment while preserving the discussion hierarchy and its existing replies. Only the comment owner can perform this operation."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for creating, retrieving, updating, and deleting comments on posts. Supports nested replies through parent-child relationships and soft deletion to preserve discussion history."
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "{base_url}",
+      "value": ""
+    },
+    {
+      "key": "auth",
+      "secret": true
+    }
+  ]
+}
