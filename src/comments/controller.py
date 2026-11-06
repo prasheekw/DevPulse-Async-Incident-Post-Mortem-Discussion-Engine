@@ -57,6 +57,7 @@ def get_comments_by_post_id(post_id:int, db:Session):
             "id": c.id,
             "comment": c.comment,
             "parent_comment_id": c.parent_comment_id,
+            "is_deleted": c.is_deleted,
             "replies": []
         }
         for c in all_comments
