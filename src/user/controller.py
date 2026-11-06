@@ -8,6 +8,9 @@ from src.utils.config import settings
 from datetime import timedelta, datetime, timezone
 from jwt.exceptions import InvalidTokenError
 import jwt
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+security = HTTPBearer()
 
 password_hash = PasswordHash.recommended()
 
@@ -90,14 +93,18 @@ def login(body:LoginSchema, db:Session):
 
     return token
 
-def is_authenticated(request:Request, db:Session = Depends(get_db)):
+def is_authenticated(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db)
+):
     try:
-        jwt_token = request.headers.get("authorization")
-        if not jwt_token:
-            raise HTTPException(status_code=401, detail="you are Unauthorized")
-        token = jwt_token.split(" ")[-1]
+        token = credentials.credentials
 
-        data = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
+        data = jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM]
+        )
 
         user_id = data.get("_id")
         exp_time = data.get("exp")
@@ -105,15 +112,25 @@ def is_authenticated(request:Request, db:Session = Depends(get_db)):
         current_time = datetime.now().timestamp()
 
         if exp_time is None:
-            raise HTTPException(status_code=401, detail="Token expiration is missing")
+            raise HTTPException(
+                status_code=401,
+                detail="Token expiration is missing"
+            )
 
         if current_time > exp_time:
-            raise HTTPException(status_code=401, detail="you are Unauthorized")
+            raise HTTPException(
+                status_code=401,
+                detail="You are unauthorized"
+            )
 
         user = db.query(User).filter(User.id == user_id).first()
+
         if not user:
-            raise HTTPException(status_code=401, detail="you are unauthorized")
-        
+            raise HTTPException(
+                status_code=401,
+                detail="You are unauthorized"
+            )
+
     except InvalidTokenError:
         raise HTTPException(status_code=401, detail="You are unauthorized")
 
