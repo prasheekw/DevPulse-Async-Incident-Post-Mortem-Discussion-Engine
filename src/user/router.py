@@ -23,6 +23,6 @@ def register(body:UserCreate, db:Session = Depends(get_db)):
 def login(body:LoginSchema, db: Session = Depends(get_db)):
     return controller.login(body, db)
 
-@router.get("/is_auth", status_code=200)
-def is_authenticated(request:Request, db:Session = Depends(get_db), response_model=UserResponse):
+@router.get("/is_auth", status_code=200, response_model=UserResponse)
+def is_authenticated(request:Request, db:Session = Depends(get_db)):
     return controller.is_authenticated(request, db)

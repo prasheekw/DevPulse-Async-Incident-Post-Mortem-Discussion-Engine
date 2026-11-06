@@ -4,6 +4,9 @@
 
 # Python
 __pycache__/
+.pytest_cache
 *.py[cod]
 .venv/
 venv/
+.neon
+node_modules/

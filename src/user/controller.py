@@ -84,7 +84,7 @@ def login(body:LoginSchema, db:Session):
     if not valid_password:
         raise HTTPException(status_code=401, detail="password is incorrect")
 
-    exp_time = datetime.now(timezone.utc) + timedelta(settings.EXP_TIME)
+    exp_time = datetime.now(timezone.utc) + timedelta(minutes=settings.EXP_TIME)
 
     token = jwt.encode({"_id":str(is_username.id), "exp": exp_time.timestamp()},settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
@@ -97,7 +97,7 @@ def is_authenticated(request:Request, db:Session = Depends(get_db)):
             raise HTTPException(status_code=401, detail="you are Unauthorized")
         token = jwt_token.split(" ")[-1]
 
-        data = jwt.decode(jwt_token, settings.SECRET_KEY, settings.ALGORITHM)
+        data = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
 
         user_id = data.get("_id")
         exp_time = data.get("exp")
